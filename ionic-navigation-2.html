@@ -1,0 +1,128 @@
+<html ng-app="naviTest">
+<head>
+  <meta charset="utf-8"/>
+  <meta name="viewport" content="initial-scale=1, maximum-scale=1, user-scalable=no, width=device-width"/>
+	<title>Ionic Test: Navi</title>
+	<link href="ionic-v1.0.0-beta.12/css/ionic.min.css" rel="stylesheet" type="text/css" />	
+	<script src="ionic-v1.0.0-beta.12/js/ionic.bundle.js"></script>
+	<style type="text/css">
+	body {
+		backgorund-color: white;
+	}
+	</style>
+</head>
+<body>
+
+<ion-nav-bar class="nav-title-slide-ios7 bar-positive"></ion-nav-bar>
+<ion-nav-view animation="slide-left-right"></ion-nav-view>
+
+<!-- index template -->
+<!-- ~~~~~~~~~~~~~ -->
+<script id="index.html" type="text/ng-template">
+  <ion-view title="Index">
+    <ion-content>
+      
+      <h2>Nested States / Views</h2>
+      https://github.com/angular-ui/ui-router/wiki/Nested-States-%26-Nested-Views
+
+      <a href="#/foobar">Go to foobar page!</a>
+    </ion-content>
+  </ion-view>
+</script>
+
+<!-- home template -->
+<!-- ~~~~~~~~~~~~~ -->
+<script id="home.html" type="text/ng-template">
+  <ion-view title="Home">
+    <ion-content>
+      Home!
+    </ion-content>
+  </ion-view>
+</script>
+
+<!-- foobar template -->
+<!-- ~~~~~~~~~~~~~~~ -->
+<script id="foobar.html" type="text/ng-template">
+  <ion-view title="FooBar">
+    <ion-content>
+    	
+    	FooBar content
+
+      <a href="#/home">Go to home page!</a>
+    </ion-content>
+  </ion-view>
+</script>
+
+<!-- tabs template -->
+<!-- ~~~~~~~~~~~~~ -->
+<script id="tabs.html" type="text/ng-template">
+  <ion-tabs class="tabs-icon-top tabs-positive">
+
+    <ion-tab title="Home" icon="ion-home" href="#/tab/home">
+      <ion-nav-view name="home-tab"></ion-nav-view>
+    </ion-tab>
+
+    <ion-tab title="About" icon="ion-ios7-information" href="#/tab/about">
+      <ion-nav-view name="about-tab"></ion-nav-view>
+    </ion-tab>
+
+    <ion-tab title="Contact" icon="ion-ios7-world" ui-sref="tabs.contact">
+      <ion-nav-view name="contact-tab"></ion-nav-view>
+    </ion-tab>
+
+  </ion-tabs>
+</script>
+
+<!-- script -->
+<!-- ~~~~~~ -->
+<script type="text/javascript">
+
+var app = angular.module('naviTest', ['ionic']);
+
+app.config(function($stateProvider, $urlRouterProvider) {
+  
+  $stateProvider
+  .state('tabs', {
+    url: "/tab",
+    abstract: true,
+    templateUrl: "tabs.html"
+  })
+  .state('tabs.home', {
+    url: '/home',
+    views: {
+      'home-tab': {
+        templateUrl: 'home.html',
+        controller: 'HomeCntrl'
+      }
+    }
+  })
+  .state('tabs.index', {
+    url: '/',
+    templateUrl: 'index.html',
+    controller: 'IndexCntrl'
+  })  
+  .state('tabs.foobar', {
+    url: '/foobar',
+    templateUrl: 'foobar.html',
+    controller: 'FoobarCntrl'
+  });
+
+  $urlRouterProvider.otherwise("/");
+});
+
+app.controller('IndexCntrl', function($scope) {
+	console.log("INDEX");
+});
+
+app.controller('HomeCntrl', function($scope) {
+  console.log("HOME");
+});
+
+app.controller('FoobarCntrl', function($scope) {
+	console.log("FOOBAR");
+});
+
+</script>
+
+</body>
+</html>

@@ -1,0 +1,80 @@
+<html ng-app="naviTest">
+<head>
+  <meta charset="utf-8"/>
+  <meta name="viewport" content="initial-scale=1, maximum-scale=1, user-scalable=no, width=device-width"/>
+	<title>Ionic Test: Navi</title>
+	<link href="ionic-v1.0.0-beta.12/css/ionic.min.css" rel="stylesheet" type="text/css" />	
+	<script src="ionic-v1.0.0-beta.12/js/ionic.bundle.js"></script>
+	<style type="text/css">
+	body {
+		backgorund-color: white;
+	}
+	</style>
+</head>
+<body>
+
+<ion-nav-bar class="nav-title-slide-ios7 bar-positive"></ion-nav-bar>
+<ion-nav-view animation="slide-left-right"></ion-nav-view>
+
+<!-- home template -->
+<!-- ~~~~~~~~~~~~~ -->
+<script id="home.html" type="text/ng-template">
+  <ion-view title="Home">
+    <ion-content>
+      
+      On app start, $stateProvider will look at the url, see it matches the index state, 
+      and then try to load home.html into the <i>ion-nav-view</i>
+
+      <a href="#/foobar">Go to foobar page!</a>
+    </ion-content>
+  </ion-view>
+</script>
+
+<!-- foobar template -->
+<!-- ~~~~~~~~~~~~~~~ -->
+<script id="foobar.html" type="text/ng-template">
+  <ion-view title="FooBar">
+    <ion-content>
+    	
+    	FooBar content
+
+      <a href="#/home">Go to home page!</a>
+    </ion-content>
+  </ion-view>
+</script>
+
+<!-- script -->
+<!-- ~~~~~~ -->
+<script type="text/javascript">
+
+var app = angular.module('naviTest', ['ionic']);
+
+app.config(function($stateProvider, $urlRouterProvider) {
+  
+  $stateProvider
+  .state('index', {
+    url: '/',
+    templateUrl: 'home.html',
+    controller: 'IndexCntrl'
+  })
+  .state('foobar', {
+    url: '/foobar',
+    templateUrl: 'foobar.html',
+    controller: 'FoobarCntrl'
+  });
+
+  $urlRouterProvider.otherwise("/");
+});
+
+app.controller('IndexCntrl', function($scope) {
+	console.log("INDEX");
+});
+
+app.controller('FoobarCntrl', function($scope) {
+	console.log("FOOBAR");
+});
+
+</script>
+
+</body>
+</html>

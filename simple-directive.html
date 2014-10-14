@@ -1,0 +1,31 @@
+<!doctype html>
+<html> 
+<head>
+	<script src="angularjs-1.2.24/angular.js"></script>
+</head>
+<body ng-app="simpleDirective" ng-controller="Main">
+
+<script type="text/javascript">
+var app = angular.module("simpleDirective", []);
+
+app.controller('Main', function($scope) {
+    $scope.customer = {
+        name: 'Naomi',
+        address: 'FooBar City'
+    };
+
+    console.log("Main controller called");
+});
+
+app.directive('myCustomer', function() {
+    console.log("Rendering template");
+    return {
+        template: '<b>Name</b>: {{customer.name}} <b>Address</b>: {{customer.address}}'
+    };
+});
+</script>
+
+<div my-customer></div>
+
+</body>
+</html>

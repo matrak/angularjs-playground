@@ -1,0 +1,85 @@
+<!doctype html>
+<html> 
+<head>
+    <script src="angularjs-1.2.24/angular.js"></script>
+    <style type="text/css">
+		li {
+		  height: 120px;
+		  border-bottom: 1px solid gray;
+		}
+
+		#fixed {
+		    height: 400px;
+		    overflow: auto;
+        border: 5px red solid;
+		}
+		</style>
+</head>
+<body ng-app="scroll" ng-controller="Main">
+http://jsfiddle.net/vojtajina/U7Bz9/
+
+<div id="fixed" when-scrolled="loadMore()">
+  <ul>
+    <li ng-repeat="i in items">{{i.id}}</li>
+  </ul>  
+</div>
+
+<script type="text/javascript">
+
+function Main($scope, $q) {
+  $scope.items = [];
+    
+  var counter = 0;
+  $scope.loadMore = function() {
+    var d = $q.defer();
+
+    for (var i = 0; i < 5; i++) {
+      $scope.items.push({id: counter});
+      counter += 10;
+    }
+
+    d.resolve(true);
+    return d.promise;
+  };
+    
+  $scope.loadMore();
+}
+
+var app = angular.module('scroll', []);
+
+app.directive('whenScrolled', function() {
+  return function(scope, elm, attr) {
+    var raw = elm[0];
+
+    scope.loading = false;
+    scope.fullPageLoaded = false;
+
+      console.log(raw);
+      console.log('raw.scrollTop + raw.offsetHeight', (raw.scrollTop + raw.offsetHeight));
+      console.log('raw.scrollHeight', raw.scrollHeight);
+
+    elm.bind('scroll', function() {
+      
+      console.log('raw.scrollTop + raw.offsetHeight', (raw.scrollTop + raw.offsetHeight));
+      console.log('raw.scrollHeight', raw.scrollHeight);
+
+      if(scope.loading) {
+        return;
+      }
+
+      if (raw.scrollTop + raw.offsetHeight >= raw.scrollHeight) {
+        scope.loading = true;
+        console.log("Loading");
+        var promise = scope.$apply(attr.whenScrolled);        
+        promise.then(function() {
+          console.log("promise resolved, loading = false");
+          scope.loading = false;
+        });
+      }
+    });
+  };
+});
+
+</script>
+</body>
+</html>

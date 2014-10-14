@@ -1,0 +1,43 @@
+<!doctype html>
+<html> 
+<head>
+		<script src="angularjs-1.2.24/angular.js"></script>
+</head>
+<body ng-app="docsIsolateScopeDirective">
+
+<h2> Directives with isolated scope </h2>
+<div ng-controller="MyController"> 
+
+	<!-- Attributes on the tags are evaluated, simple value will not work -->
+  <my-customer info="naomi" foobar="foobar1"></my-customer>
+  <hr>
+  <my-customer info="igor" foobar="'foo2'"></my-customer>
+
+</div>
+
+<script type="text/javascript">
+
+angular.module('docsIsolateScopeDirective', [])
+  
+  .controller('MyController', function($scope) {
+    $scope.naomi = { name: 'Naomi', address: '1600 Amphitheatre' };
+    $scope.foobar1 = "f1";
+    $scope.igor  = { name: 'Igor',  address: '123 Somewhere' };
+  })
+
+  .directive('myCustomer', function() {
+    return {
+      restrict: 'E',
+      //The scope option is an object that contains a property for each isolate scope binding.
+      scope: {
+      	// (=info) tells $compile to bind to the info attribute.
+        customerInfo: '=info',
+        // shorthand syntax if attribute name is the same as the value you want to bind to inside the directive's scope
+        foobar: '=' 
+      },
+      template: '<div>Name: {{customerInfo.name}} Address: {{customerInfo.address}} FooBar: {{foobar}}</div>'
+    };
+  });
+</script>
+</body>
+</html>

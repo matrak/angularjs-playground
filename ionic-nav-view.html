@@ -1,0 +1,65 @@
+<html ng-app="ionicApp">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="initial-scale=1, maximum-scale=1, user-scalable=no, width=device-width">
+    <title>Inline Tabs</title>
+
+  <link href="ionic-v1.0.0-beta.12/css/ionic.min.css" rel="stylesheet" type="text/css" /> 
+  <script src="ionic-v1.0.0-beta.12/js/ionic.bundle.js"></script>
+
+  </head>
+  <body ng-controller="RootCtrl">
+    
+    <ion-nav-bar class="bar-positive" animation="nav-title-slide-ios7"></ion-nav-bar>
+    <ion-nav-view animation="slide-left-right">
+      <ion-view title="Home" name="home">
+        <ion-content class="padding">
+          <p>Foobar</p>
+          <p>
+            <a class="button icon icon-right ion-chevron-right" ui-sref="baz">Baz</a>
+          </p>
+        </ion-content>
+      </ion-view>
+    </ion-nav-view>
+
+  <!-- ############### -->
+  <!-- ## Templates ## -->
+  <!-- ############### -->
+    <script id="baz.html" type="text/ng-template">
+      <ion-view title="Baz" name="baz">
+        <ion-content class="padding">
+          <p>Baz</p>
+          <p>
+            <a class="button icon icon-right ion-chevron-right" ui-sref="home">Home</a>
+          </p>
+        </ion-content>
+      </ion-view>
+    </script>
+
+
+  <!-- ############ -->
+  <!-- ## Script ## -->
+  <!-- ############ -->
+
+  <script type="text/javascript">
+  var app = angular.module('ionicApp', ['ionic']);
+
+  app.controller('RootCtrl', function($scope) {
+    $scope.onControllerChanged = function(oldController, oldIndex, newController, newIndex) {
+      console.log('Controller changed', oldController, oldIndex, newController, newIndex);
+      console.log(arguments);
+    };
+  });
+
+  app.config(function($stateProvider, $urlRouterProvider) {
+  $stateProvider
+    .state('baz', {
+      url: "/baz",
+      templateUrl: "baz.html"
+    });
+  });
+
+  </script>
+
+  </body>
+</html>

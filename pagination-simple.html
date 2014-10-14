@@ -1,0 +1,158 @@
+<!doctype html>
+<html> 
+<head>
+    <link rel="stylesheet" type="text/css" href="bootstrap-3.3/css/bootstrap.min.css">
+		<script src="angularjs-1.2.24/angular.js"></script>
+
+		<script type="text/javascript">
+
+var pg = angular.module('mrak.pagination', []);
+
+pg.constant('paginationConfig', {
+  itemsPerPage  : 10,
+  pagesWindow   : 3,
+  boundaryLinks : false,
+  directionLinks: true
+});		
+
+/**
+ * Attribute:
+ * @param pagesWindow: number of clickable pages, ex. with 1 (6 = current page): [...][5][6][7][...]
+ * @param total-items
+ * @param current-page
+ */ 
+pg.directive('pagination', function($parse, paginationConfig) {
+    
+  function helperPreparePages(currentPage, totalPages, pagesWindow) {
+    var pages = [];
+
+    function helperMakePage(text, number, placeholder, active) {
+      return {
+        text       : text,
+        number     : number,
+        placeholder: placeholder,
+        active     : active
+      };
+    }
+
+    var startPage = currentPage - pagesWindow;
+        startPage = (startPage > 0) ? startPage : 1;
+    var endPage = currentPage + pagesWindow;
+        endPage = (endPage > totalPages) ? totalPages : endPage;
+
+    if(startPage > 2) {
+      pages.push(helperMakePage('...', startPage - 1, true, false));
+    }
+
+    for(var p = startPage; p <= endPage; p++) {
+      pages.push(helperMakePage(p, p, false, currentPage == p));
+    }
+
+    if(endPage + 2 < totalPages) {
+      pages.push(helperMakePage('...', endPage + 1, true, false));       
+    }
+
+    return pages;
+  }
+
+  function link(scope, element, attrs, ngModelCtrl) {
+
+    function helperEvalParentOrDefault(value, defaultValue) {
+      return angular.isDefined(value) ? scope.$parent.$eval(value) : defaultValue;
+    }
+
+    function helperCalculateTotalPages(itemsPerPage, totalItems) {
+      var totalPages = itemsPerPage < 1 ? 1 : Math.ceil(totalItems / itemsPerPage);
+      return Math.max(totalPages || 0, 1);
+    }
+
+    // TODO
+    scope.$watch('totalItems', function() {
+      //scope.totalPages = helperCalculateTotalPages();
+    });
+
+    var pagesWindow      = helperEvalParentOrDefault(attrs.pagesWindow, paginationConfig.pagesWindow);
+    scope.boundaryLinks  = helperEvalParentOrDefault(attrs.boundaryLinks, paginationConfig.boundaryLinks);
+    scope.directionLinks = helperEvalParentOrDefault(attrs.directionLinks, paginationConfig.directionLinks);
+
+    // TODO
+    var currentPage = ngModelCtrl.$isEmpty() ? 1 : ngModelCtrl.$viewValue;
+    console.log("RENDERING THE CURRENT PAGE", currentPage);
+
+    scope.page = currentPage;
+    scope.totalPages = 123; // TODO total pages
+    scope.pages = helperPreparePages(currentPage, scope.totalPages, pagesWindow);
+
+    console.log("currentPage", currentPage, "pages", scope.pages);
+    console.log(scope.$parent);
+
+    scope.selectPage = function(page) {
+      ngModelCtrl.$setViewValue(page);
+      scope.page = page;
+      scope.pages = helperPreparePages(page, scope.totalPages, pagesWindow);
+    }
+
+    scope.noPrevious = function() {
+      return scope.page < 2;
+    }
+
+    scope.noNext = function() {
+      return scope.page == scope.totalPages;
+    }
+  }
+
+	var pgDirective = {
+		restrict   : 'EA',
+    scope: {
+      totalItems: '='
+    },
+    require    : 'ngModel', // for ngModelCtrl
+    templateUrl: 'template/pagination/pagination.html',
+    replace    : true,
+    link       : link		
+	};
+
+	return pgDirective;
+});
+
+		</script>
+
+</head>
+<body ng-app="paginationDemo">
+<div ng-controller="PaginationDemoCtrl">
+
+<pagination direction-links="true" boundary-links="true" total-items="totalItems" ng-model="currentPage" ng-change="pageChanged()"></pagination>
+
+<pre>The selected page no: {{currentPage}}</pre>
+
+</div>
+
+<script id="template/pagination/pagination.html" type="text/ng-template">
+<ul class="pagination">
+  <li ng-if="boundaryLinks" ng-class="{disabled: noPrevious()}"><a href ng-click="selectPage(1)">First</a></li>
+  <li ng-if="directionLinks" ng-class="{disabled: noPrevious()}"><a href ng-click="selectPage(page - 1)">Previous</a></li>
+  <li ng-repeat="page in pages track by $index" ng-class="{active: page.active}"><a href ng-click="selectPage(page.number)">{{page.text}}</a></li>
+  <li ng-if="directionLinks" ng-class="{disabled: noNext()}"><a href ng-click="selectPage(page + 1)">Next</a></li>
+  <li ng-if="boundaryLinks" ng-class="{disabled: noNext()}"><a href ng-click="selectPage(totalPages)">Last</a></li>
+</ul>
+</script>
+
+<script type="text/javascript">
+
+var demoApp = angular.module('paginationDemo', ['mrak.pagination']);
+
+demoApp.controller('PaginationDemoCtrl', function ($scope) {
+  
+  $scope.totalItems = 64;
+  $scope.currentPage = 1;
+
+  $scope.pageChanged = function() {
+    console.log('Page changed to: ' + $scope.currentPage);
+  };
+
+});
+
+</script>
+
+</body>
+</html>

@@ -1,0 +1,40 @@
+<html ng-app="app">
+
+<head>
+	<title>Scopes Example</title>
+</head>
+
+<body>
+
+<div ng-controller="ParentController">
+	<div ng-controller="ChildController">
+		<a ng-click="sayHello()">Say hello</a>
+	</div>
+	<span ng-bind="person.greeted"></span>
+</div>
+
+<script src="angularjs-1.2.24/angular.js"></script>
+<script>
+
+var app = angular.module('app', []);
+
+app.controller('ParentController', ['$scope', '$parse', function($scope, $parse) {
+	$scope.person = {greeted: false};
+	console.log("Parent Controller");
+	console.log($parse);
+}]);
+
+app.controller('ChildController', function($scope, $parse, $log) {
+
+	console.log("Child Controller")
+	console.log($log);
+	console.log($parse);
+
+	$scope.sayHello = function() {
+		$scope.person.greeted = true;
+	}
+});
+
+</script>
+</body>
+</html>

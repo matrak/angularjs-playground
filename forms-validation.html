@@ -1,0 +1,37 @@
+<html ng-app="app">
+
+<head>
+	<title>Scopes Example</title>
+</head>
+
+<body>
+
+<div ng-controller="NoValidateController">
+	<form name="form" novalidate>
+		<label name="email">Your email</label>
+		<input type="email" name="email" ng-model="email" placeholder="Email Address" />
+	</form>
+</div>
+
+<div ng-controller="FormController">
+	<form name="form">
+		<label name="email">Your email</label>
+		<input type="email" name="email" ng-model="email" placeholder="Email Address" ng-minlength="5" ng-maxlength="20"/>
+		<div></div>
+	</form>
+</div>
+
+<script src="angularjs-1.2.24/angular.js"></script>
+<script>
+
+var app = angular.module('app', []);
+
+app.controller('NoValidateController', function($scope){
+});
+
+app.controller('FormController', function($scope){
+});
+
+</script>
+</body>
+</html>

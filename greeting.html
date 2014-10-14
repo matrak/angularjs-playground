@@ -1,0 +1,33 @@
+<html ng-app>
+<head>
+	<script src="angularjs-1.2.24/angular.js"></script>
+</head>
+<body>
+
+<div ng-controller='HelloController'>
+	<input ng-model='greeting.text'>
+	<p>{{greeting.text}}, World</p>
+	<p ng-bind="greeting.milis"></p>
+	<span ng-bind="watchGreeting"></span>
+</div>
+
+<script type="text/javascript">
+
+function HelloController($scope, $location, $log) {
+	$scope.greeting = { 
+		text : 'Hello',
+		milis: new Date().getMilliseconds()
+	};
+
+	$scope.watchGreeting = "";
+	$scope.$watch('greeting.text', function(newVal, oldVal) {
+		$scope.watchGreeting = "--- " + newVal;
+	});
+
+	console.log($scope);
+}
+
+</script>
+
+</body>
+</html>

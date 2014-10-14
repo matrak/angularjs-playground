@@ -1,0 +1,72 @@
+<!doctype html>
+<html> 
+<head>
+
+	<link rel="stylesheet" type="text/css" href="bootstrap-3.3/css/bootstrap.min.css">
+	<script src="angularjs-1.2.24/angular.js"></script>
+	<script src="pagination-module.js"></script>
+
+</head>
+<body ng-app="paginationDemo">
+
+<div ng-controller="PaginationDemoCtrl">
+
+    <h4>Default</h4>
+    <pagination total-items="totalItems" ng-model="currentPage" ng-change="pageChanged()"></pagination>
+    <pagination boundary-links="true" total-items="totalItems" ng-model="currentPage" class="pagination-sm" previous-text="&lsaquo;" next-text="&rsaquo;" first-text="&laquo;" last-text="&raquo;"></pagination>
+    <pagination direction-links="false" boundary-links="true" total-items="totalItems" ng-model="currentPage"></pagination>
+    <pagination direction-links="false" total-items="totalItems" ng-model="currentPage" num-pages="smallnumPages"></pagination>
+    <pre>The selected page no: {{currentPage}}</pre>
+    <button class="btn btn-info" ng-click="setPage(3)">Set current page to: 3</button>
+
+    <hr />
+    <h4>Pager</h4>
+    <pager total-items="totalItems" ng-model="currentPage"></pager>
+
+    <hr />
+    <h4>Limit the maximum visible buttons</h4>
+    <pagination total-items="bigTotalItems" ng-model="bigCurrentPage" max-size="maxSize" class="pagination-sm" boundary-links="true"></pagination>
+    <pagination total-items="bigTotalItems" ng-model="bigCurrentPage" max-size="maxSize" class="pagination-sm" boundary-links="true" rotate="false" num-pages="numPages"></pagination>
+    <pre>Page: {{bigCurrentPage}} / {{numPages}}</pre>
+
+</div>
+
+<script id="template/pagination/pagination.html" type="text/ng-template">
+<ul class="pagination">
+  <li ng-if="boundaryLinks" ng-class="{disabled: noPrevious()}"><a href ng-click="selectPage(1)">{{getText('first')}}</a></li>
+  <li ng-if="directionLinks" ng-class="{disabled: noPrevious()}"><a href ng-click="selectPage(page - 1)">{{getText('previous')}}</a></li>
+  <li ng-repeat="page in pages track by $index" ng-class="{active: page.active}"><a href ng-click="selectPage(page.number)">{{page.text}}</a></li>
+  <li ng-if="directionLinks" ng-class="{disabled: noNext()}"><a href ng-click="selectPage(page + 1)">{{getText('next')}}</a></li>
+  <li ng-if="boundaryLinks" ng-class="{disabled: noNext()}"><a href ng-click="selectPage(totalPages)">{{getText('last')}}</a></li>
+</ul>
+</script>
+
+<script id="template/pagination/pager.html" type="text/ng-template">
+<ul class="pager">
+  <li ng-class="{disabled: noPrevious(), previous: align}"><a href ng-click="selectPage(page - 1)">{{getText('previous')}}</a></li>
+  <li ng-class="{disabled: noNext(), next: align}"><a href ng-click="selectPage(page + 1)">{{getText('next')}}</a></li>
+</ul>
+</script>
+
+<script type="text/javascript">
+
+angular.module('paginationDemo', ['ui.bootstrap.pagination']).controller('PaginationDemoCtrl', function ($scope) {
+  $scope.totalItems = 64;
+  $scope.currentPage = 4;
+
+  $scope.setPage = function (pageNo) {
+    $scope.currentPage = pageNo;
+  };
+
+  $scope.pageChanged = function() {
+    console.log('Page changed to: ' + $scope.currentPage);
+  };
+
+  $scope.maxSize = 5;
+  $scope.bigTotalItems = 175;
+  $scope.bigCurrentPage = 1;
+});
+</script>
+
+</body>
+</html>

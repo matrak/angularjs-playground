@@ -1,0 +1,62 @@
+<!doctype html>
+<html> 
+<head>
+		<script src="angularjs-1.2.24/angular.js"></script>
+</head>
+<body ng-app="timeDirective">
+
+<h2> Creating a Directive that Manipulates the DOM </h2>
+Directives that want to modify the DOM typically use the <pre>function link(scope, element, attrs) { ... }</pre> option.
+<ul>
+	<li>scope is an Angular scope object</li>
+	<li>element is the jqLite-wrapped element that this directive matches</li>
+	<li>attrs is a hash object with key-value pairs of normalized attribute names and their corresponding attribute values</li>
+</ul>
+
+<div ng-controller="Controller">
+
+	Format:<br/>
+	<input type="text" ng-value="format"/>
+	<span my-current-time></span>
+</div>
+
+<script type="text/javascript">
+var app = angular.module('timeDirective', []);
+
+app.controller('Controller', ['$scope', function($scope) {
+    $scope.format = 'M/d/yy h:mm:ss a';
+  }]);
+
+app.directive('myCurrentTime', function($interval, dateFilter) {
+
+    function link(scope, element, attrs) {
+      var format;
+      var timeoutId;
+
+      function updateTime() {
+        element.text(dateFilter(new Date(), format));
+      }
+
+      scope.$watch(attrs.myCurrentTime, function(value) {
+        format = value;
+        updateTime();
+      });
+
+      element.on('$destroy', function() {
+        $interval.cancel(timeoutId);
+      });
+
+      // start the UI update process; save the timeoutId for canceling
+      timeoutId = $interval(function() {
+        updateTime(); // update DOM
+      }, 1000);
+    }
+
+    return {
+      link: link
+    };
+  });
+
+</script>
+</body>
+</html>

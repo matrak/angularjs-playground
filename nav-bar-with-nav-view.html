@@ -1,0 +1,145 @@
+<html ng-app="ionicApp">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="initial-scale=1, maximum-scale=1, user-scalable=no, width=device-width">
+    
+    <title>Tabs Example</title>
+
+    <link href="http://code.ionicframework.com/0.9.26/css/ionic.min.css" rel="stylesheet">
+    <script src="http://code.ionicframework.com/0.9.26/js/ionic.bundle.js"></script>
+  </head>
+
+  <body ng-controller="AppController">
+    
+    <!-- main view -->
+
+    <ion-nav-bar animation="nav-title-slide-ios7" 
+             type="bar-positive" 
+             back-button-type="button-icon" 
+             back-button-icon="ion-arrow-left-c"></ion-nav-bar>
+             
+    <ion-nav-view animation="slide-left-right"></ion-nav-view>
+
+    <!-- templates -->
+
+    <script id="page1.html" type="text/ng-template">
+      <ion-view title="'Page 1'" left-buttons="leftButtons">
+        <ion-content has-header="true" padding="true">
+          <p>Page 1 Content</p>
+          <a class="button" ui-sref="page2">Go To Page 2</a>
+          <a class="button" ui-sref="page3">Go To Page 3</a>
+        </ion-content>
+      </ion-view>
+    </script>
+
+    <script id="page2.html" type="text/ng-template">
+      <ion-view title="'Page 2'" left-buttons="leftButtons" drag-back>
+        <ion-content has-header="true" padding="true">
+          <p>Page 2 Content</p>
+          <a class="button" ui-sref="page1">Go To Page 1</a>
+          <a class="button" ui-sref="page3">Go To Page 3</a>
+        </ion-content>
+      </ion-view>
+    </script>
+
+    <script id="page3.html" type="text/ng-template">
+      <ion-view title="'Page 3'" left-buttons="leftButtons" drag-back>
+        <ion-content has-header="true" padding="true">
+          <p>Page 3 Content</p>
+          <a class="button" ui-sref="page1">Go To Page 1</a>
+          <a class="button" ui-sref="page2">Go To Page 2</a>
+        </ion-content>
+      </ion-view>
+    </script>
+
+    <!-- script -->
+
+    <script> 
+
+    var app = angular.module('ionicApp', ['ionic']);
+    
+    app.config(function($stateProvider, $urlRouterProvider) {
+		  $stateProvider
+			.state('page1', {
+  			url: "/page1", 
+  			templateUrl: "page1.html",
+  			controller : "Page1Controller"
+    	})
+
+      .state('page2', {
+        url: "/page2",
+        templateUrl: "page2.html",
+        controller : "Page2Controller"
+      })
+
+      .state('page3', {
+        url: "/page3",
+        templateUrl: "page3.html",
+        controller : "Page3Controller"
+      })
+  
+    $urlRouterProvider.otherwise("/page1");
+  });
+
+  app.directive('dragBack', function($ionicGesture, $state) {
+    return {
+      restrict : 'A',
+      link : function(scope, elem, attr) {
+        
+        $ionicGesture.on('swipe', function(event) {
+        
+          console.log('Got swiped!');
+          event.preventDefault();
+          window.history.back();
+          
+        }, elem);  
+      }
+    }  
+  });
+
+  app.controller('AppController', function($scope) {
+    console.log('In App Controller');
+  
+    $scope.leftButtons = [{
+      type: 'button-icon icon ion-navicon',
+      tap: function(e) {
+          $scope.sideMenuController.toggleLeft();
+      }    
+    }];
+  });
+
+  app.controller('Page1Controller', function($scope) {
+    console.log('Page 1 Controller');
+  });
+
+  app.controller('Page2Controller', function($scope) {
+    console.log('Page 2 Controller');
+    $scope.leftButtons = [{
+      type: 'button-icon icon ion-navicon',
+      tap: function(e) {
+        $scope.sideMenuController.toggleLeft();
+      }    
+    }];
+  });
+  
+  app.controller('Page3Controller', function($scope, $state, $ionicViewService) {
+    console.log('Page 3 Controller');
+    $scope.leftButtons = [{
+      type: 'button-icon icon ion-navicon',
+      tap: function(e) {
+        $scope.sideMenuController.toggleLeft();
+      }    
+    }];
+  
+ /* $scope.goPage = function(state, animation) {
+    $ionicViewService.nextAnimation = animation;
+    $state.go(state);
+  };
+  */
+  });  
+    
+    
+  </script>
+
+  </body>
+</html>

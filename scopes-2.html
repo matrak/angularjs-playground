@@ -1,0 +1,46 @@
+<html ng-app="app">
+
+<head>
+	<title>Scopes Example</title>
+	<script src="angularjs-1.2.24/angular.js"></script>
+</head>
+
+<body>
+
+<div ng-controller="ParentController">
+	<span ng-bind="person.name"></span>
+
+	<div ng-controller="ChildController">
+		<input ng-model="editPerson.name" type="text"/>
+		<a ng-click="applyChanges()">Update!</a>
+	</div>
+	
+</div>
+
+<script>
+
+var app = angular.module('app', []);
+
+app.controller('ParentController', function($scope, $parse) {
+	
+	$scope.person = {
+		name: "Foobar"
+	};
+
+});
+
+app.controller('ChildController', function($scope, $parse, $log) {
+
+	$scope.editPerson = $parse("&$parent.person");
+
+	$scope.applyChanges = function() {
+		$scope.$apple(function() {
+
+		});
+
+	}
+});
+
+</script>
+</body>
+</html>

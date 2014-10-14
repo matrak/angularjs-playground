@@ -1,0 +1,96 @@
+<!doctype html>
+<html> 
+<head>
+    <script src="angularjs-1.2.24/angular.js"></script>
+</head>
+<body ng-app>
+<div ng-controller="MyController"> 
+
+  <div class="list-container">
+
+    <ul id="seo-list" ng-show="seoListVisible">
+      <li>
+        Name <span>SEO List</span>
+        Age <span>123</span>
+      </li>
+      <li>
+        Name <span>SEO List</span>
+        Age <span>123</span>
+      </li>
+      <li>
+        Name <span>SEO List</span>
+        Age <span>123</span>
+      </li>
+    </ul>
+
+    <ul>
+      <li ng-repeat="friend in friends">
+        Name <span>{{friend.name}}</span>
+        Age <span>{{friend.age}}</span>
+      </li>
+    </ul>
+
+  </div>
+
+  <button ng-repeat="p in pages" 
+          ng-click="goToPage(p)" 
+          ng-disabled="buttonDisabled(p)">page {{p}}</button>
+
+</div>
+
+<script type="text/javascript">
+
+function MyController($scope) { 
+
+  var friends = [];
+
+  var firendsPage1 = [
+    {name:'SEO List', age:123},
+    {name:'SEO List', age:123},
+    {name:'SEO List', age:124},
+  ];
+
+  var firendsPage2 = [
+    {name:'John',    age:25},
+    {name:'Jessie',  age:30},
+    {name:'Johanna', age:28},  
+  ];
+  
+  var firendsPage3 = [
+    {name:'Joy',   age:15},
+    {name:'Mary',  age:28},
+    {name:'Peter', age:95},
+  ];
+
+  var firendsPage4 = [
+    {name:'Sebastian', age:50},
+    {name:'Erika',     age:27},
+    {name:'Patrick',   age:40},
+    {name:'Samantha',  age:60}
+  ];
+
+  var friendsList = [
+    firendsPage1, firendsPage2, firendsPage3, firendsPage4
+  ];
+
+  //var $staticList = angular.element(document.getElementById('seo-list'));
+  $scope.seoListVisible = true;
+  
+  $scope.page  = 1;
+  $scope.pages = [1,2,3,4];
+
+  $scope.goToPage = function(page) {
+    $scope.seoListVisible = false;
+    $scope.page = page;
+    $scope.friends = friendsList[page - 1];
+  }
+
+  $scope.buttonDisabled = function(page) {
+    return $scope.page == page;
+  };
+
+};
+
+</script>
+</body>
+</html>

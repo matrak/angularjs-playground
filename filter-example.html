@@ -1,0 +1,36 @@
+<html ng-app="app">
+
+<head>
+	<title>Scopes Example</title>
+</head>
+
+<body>
+
+<div ng-controller="MyController">
+<input ng-model="userInput" type="text" placeholder="Enter an expression" />
+<h2>{{ userInput | lowercase | capitalize }}</h2>
+</div>
+
+
+<script src="angularjs-1.2.24/angular.js"></script>
+<script>
+
+var app = angular.module('app', []);
+
+app.controller('MyController', function($scope){
+});
+
+// filter with "pure function"
+// https://docs.angularjs.org/guide/filter
+app.filter('capitalize', function() {
+	return function(input) {
+		if (input) {
+			console.log(input);
+			return input[0].toUpperCase() + input.slice(1);
+		}
+	}
+});
+
+</script>
+</body>
+</html>

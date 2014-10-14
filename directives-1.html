@@ -1,0 +1,58 @@
+<html ng-app="app">
+
+<head>
+	<title>Directives Example</title>
+</head>
+
+<body>
+
+<script src="angularjs-1.2.24/angular.js"></script>
+<script>
+
+angular.module('app', [])
+	.directive('googleLink', function() {
+		return {
+			restrict: 'E',
+			replace: true,
+			template: '<a href="http://google.com">Click me to go to Google</a>'
+		}
+	})
+
+	.directive('bingLink', function() {
+		return {
+			restrict: 'A',
+			replace: true,
+			template: '<a href="http://bing.com">Bing is for porn</a>'
+		}
+	})
+
+	.directive('withExpression', function() {
+		return {
+			restrict: 'A',
+			replace: true,
+			template: '<div>{{expValue}}</div>'
+		}
+	});	
+
+</script>
+
+<p>element (E), an attribute (A), a class (C), or a comment (M)</p>
+
+<google-link></google-link>
+<a bing-link></a>
+<div with-expression></div>
+
+<h2>How Angular parses the DOM</h2>
+<ul>
+	<li> DOM tree is then parsed using AngularJS’s <b>$compile()</b> </li>
+	<li> module.directive takes the normalized directive name followed by a factory function. <br/>
+			 <pre>app.directive('normalizedName', function() { return OBJ });</pre> <br/>
+			 The factory function is invoked only once when the compiler matches the directive for the first time.
+	</li>
+	<li> The directive’s compile function is run and is expected to return a link() function. </li>
+	<li> The $compile() function will return a linking function that wraps all of the containing DOM element’s directives' linking functions </li>
+</ul>
+
+
+</body>
+</html>

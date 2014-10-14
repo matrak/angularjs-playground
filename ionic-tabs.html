@@ -1,0 +1,96 @@
+<html ng-app="ionicApp">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="initial-scale=1, maximum-scale=1, user-scalable=no, width=device-width">
+    <title>Inline Tabs</title>
+
+  <link href="ionic-v1.0.0-beta.12/css/ionic.min.css" rel="stylesheet" type="text/css" /> 
+  <script src="ionic-v1.0.0-beta.12/js/ionic.bundle.js"></script>
+
+  </head>
+  <body ng-controller="RootCtrl">
+    
+  <ion-tabs class="tabs-icon-only tabs-positive">
+
+    <ion-tab title="Home" icon-on="ion-ios7-filing" icon-off="ion-ios7-filing-outline" ng-controller="HomeCtrl">
+      <ion-header-bar class="bar-positive">
+        <button class="button button-clear" ng-click="foobarModal()">Click</button>
+        <h1 class="title">Home Tab</h1>
+      </ion-header-bar>
+      <ion-content has-tabs="true">
+        <h1>Home</h1>
+      </ion-content>
+    </ion-tab>
+
+    <ion-tab title="About" icon-on="icon ion-ios7-clock" icon-off="icon ion-ios7-clock-outline">
+      <header class="bar bar-header bar-positive">
+        <h1 class="title">Deadlines Tab</h1>
+      </header>
+      <ion-content has-header="true">
+        <h1>Deadlines</h1>
+      </ion-content>
+    </ion-tab>
+
+    <ion-tab title="Settings" icon-on="icon ion-ios7-gear" icon-off="icon ion-ios7-gear-outline">
+      <header class="bar bar-header bar-positive">
+        <h1 class="title">Settings Tab</h1>
+      </header>
+      <ion-content has-header="true">
+        <h1>Settings</h1>
+      </ion-content>
+    </ion-tab>
+    
+  </ion-tabs>
+
+  <!-- ############### -->
+  <!-- ## Templates ## -->
+  <!-- ############### -->
+
+  <script id="foobarModal.html" type="text/ng-template">
+    <div id="task-view" class="modal slide-in-up" ng-controller="FoobarModalCtrl">
+      <header class="bar bar-header bar-secondary">
+        <h1 class="title">Foobar</h1>
+        <button class="button button-clear button-primary" ng-click="close()">Done</button>
+      </header>
+      <ion-content class="padding has-header">
+        Foobar modal content
+      </ion-content>
+    </div>
+  </script>
+
+
+  <!-- ############ -->
+  <!-- ## Script ## -->
+  <!-- ############ -->
+
+<script type="text/javascript">
+angular.module('ionicApp', ['ionic'])
+
+.controller('RootCtrl', function($scope) {
+  $scope.onControllerChanged = function(oldController, oldIndex, newController, newIndex) {
+    console.log('Controller changed', oldController, oldIndex, newController, newIndex);
+    console.log(arguments);
+  };
+})
+
+.controller('HomeCtrl', function($scope, $timeout, $ionicModal, $ionicActionSheet) {
+  $scope.items = [];
+  $ionicModal.fromTemplateUrl('foobarModal.html', function(modal) {
+    $scope.settingsModal = modal;
+  });
+
+  $scope.foobarModal = function() {
+    $scope.settingsModal.show();
+  };
+})
+
+.controller('FoobarModalCtrl', function($scope) {
+  $scope.close = function() {
+    $scope.modal.hide();
+  }
+});
+
+</script>
+
+  </body>
+</html>

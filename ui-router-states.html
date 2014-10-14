@@ -1,0 +1,92 @@
+<html ng-app="app">
+<head>
+	<title>Ionic Form Test: Floating Labels</title>
+	<script src="ionic-v1.0.0-beta.12/js/ionic.bundle.js"></script>
+	<link rel="stylesheet" type="text/css" href="ionic-v1.0.0-beta.12/css/ionic.min.css">
+</head>
+<body>
+		https://github.com/angular-ui/ui-router
+
+    <div ui-view></div>
+
+    <!-- We'll also add some navigation: -->
+    <a ui-sref="state1">State 1</a>
+    <a ui-sref="state2">State 2</a>
+    <a ui-sref="other-state">Other State</a>
+
+    <script id="other-state.html" type="text/ng-template">
+			<h1>Other template</h1>
+    </script>
+
+    <script id="state1.html" type="text/ng-template">
+			<h1>State 1</h1>
+			<hr/>
+			<a ui-sref="state1.list">Show List</a>
+			<div ui-view></div>
+    </script>
+
+    <script id="state2.html" type="text/ng-template">
+			<h1>State 2</h1>
+			<hr/>
+			<a ui-sref="state2.list">Show List</a>
+			<div ui-view></div>    
+    </script>
+
+    <script id="state1.list.html" type="text/ng-template">
+    <h3>List of State 1 Items</h3>
+    <ul>
+      <li ng-repeat="item in items">{{ item }}</li>
+    </ul>
+    </script>
+
+    <script id="state2.list.html" type="text/ng-template">
+    <h3>List of State 2 Things</h3>
+    <ul>
+      <li ng-repeat="thing in things">{{ thing }}</li>
+    </ul>
+    </script>
+
+
+<script type="text/javascript">
+		var app = angular.module('app', ['ionic']);
+
+    app.config(function($stateProvider, $urlRouterProvider) {
+      //
+      // For any unmatched url, redirect to /state1
+      $urlRouterProvider.otherwise("/state1");
+      //
+      // Now set up the states
+      $stateProvider
+        .state('other-state', {
+          url: "/other-state",
+          templateUrl: "other-state.html"
+        })      
+        .state('state1', {
+          url: "/state1",
+          templateUrl: "state1.html"
+        })
+        .state('state1.list', {
+          url: "/list",
+          templateUrl: "state1.list.html",
+          controller: function($scope) {
+            $scope.items = ["A", "List", "Of", "Items"];
+          }
+        })
+        .state('state2', {
+          url: "/state2",
+          templateUrl: "state2.html"
+        })
+        .state('state2.list', {
+          url: "/list",
+          templateUrl: "state2.list.html",
+          controller: function($scope) {
+            $scope.things = ["A", "Set", "Of", "Things"];
+          }
+        });
+    });
+
+
+</script>
+
+</body>
+</html>
